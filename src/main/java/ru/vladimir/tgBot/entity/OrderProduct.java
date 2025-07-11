@@ -1,12 +1,14 @@
 package ru.vladimir.tgBot.entity;
-import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jakarta.persistence.*;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@Table(name = "order_product") // можно указать явно
 public class OrderProduct {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,38 +21,20 @@ public class OrderProduct {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @Column(nullable = false)
+    @Column(name = "count_product", nullable = false)
     private Integer countProduct;
 
-    public Long getId() {
-        return id;
-    }
+    public OrderProduct() {}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public ClientOrder getOrder() {
-        return order;
-    }
+    public ClientOrder getOrder() { return order; }
+    public void setOrder(ClientOrder order) { this.order = order; }
 
-    public void setOrder(ClientOrder order) {
-        this.order = order;
-    }
+    public Product getProduct() { return product; }
+    public void setProduct(Product product) { this.product = product; }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public Integer getCountProduct() {
-        return countProduct;
-    }
-
-    public void setCountProduct(Integer countProduct) {
-        this.countProduct = countProduct;
-    }
+    public Integer getCountProduct() { return countProduct; }
+    public void setCountProduct(Integer countProduct) { this.countProduct = countProduct; }
 }
