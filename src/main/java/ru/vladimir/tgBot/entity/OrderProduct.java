@@ -1,20 +1,43 @@
+//package ru.vladimir.tgBot.entity;
+//import jakarta.persistence.*;
+//
+//@Entity
+//public class OrderProduct {
+//    @Id
+//    @GeneratedValue
+//    private Long id;
+//
+//    @ManyToOne
+//    private ClientOrder order;
+//
+//    @ManyToOne
+//    private Product product;
+//
+//    @Column(nullable = false)
+//    private Integer countProduct;
 package ru.vladimir.tgBot.entity;
+
 import jakarta.persistence.*;
 
 @Entity
 public class OrderProduct {
+
     @Id
     @GeneratedValue
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "order_id")
     private ClientOrder order;
 
     @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @Column(nullable = false)
     private Integer countProduct;
+
+    public OrderProduct() {}
 
 
     public Long getId() {
