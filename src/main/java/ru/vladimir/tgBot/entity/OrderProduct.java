@@ -22,6 +22,12 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 @Entity
+@Table(
+        name = "order_product",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"order_id", "product_id"})
+        }
+)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class OrderProduct {
 
