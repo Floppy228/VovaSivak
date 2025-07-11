@@ -17,21 +17,24 @@
 //    private Integer countProduct;
 package ru.vladimir.tgBot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class OrderProduct {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "order_id", nullable = false)
     private ClientOrder order;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @Column(nullable = false)
@@ -39,36 +42,16 @@ public class OrderProduct {
 
     public OrderProduct() {}
 
+    // Getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public ClientOrder getOrder() { return order; }
+    public void setOrder(ClientOrder order) { this.order = order; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Product getProduct() { return product; }
+    public void setProduct(Product product) { this.product = product; }
 
-    public ClientOrder getOrder() {
-        return order;
-    }
-
-    public void setOrder(ClientOrder order) {
-        this.order = order;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public Integer getCountProduct() {
-        return countProduct;
-    }
-
-    public void setCountProduct(Integer countProduct) {
-        this.countProduct = countProduct;
-    }
+    public Integer getCountProduct() { return countProduct; }
+    public void setCountProduct(Integer countProduct) { this.countProduct = countProduct; }
 }
