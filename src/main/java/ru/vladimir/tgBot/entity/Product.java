@@ -19,9 +19,6 @@ public class Product {
     @Column(nullable = false)
     private Double price;
 
-    public Product(Category classicRolls, String роллФиладельфия, String s, double v) {
-    }
-
 
     public Long getId() {
         return id;
