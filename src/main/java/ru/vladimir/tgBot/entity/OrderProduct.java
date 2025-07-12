@@ -9,7 +9,7 @@ public class OrderProduct {
     private Long id;
 
     @ManyToOne
-    private ClientOrder order;
+    private ClientOrder clientOrder;
 
     @ManyToOne
     private Product product;
@@ -27,12 +27,12 @@ public class OrderProduct {
         this.id = id;
     }
 
-    public ClientOrder getOrder() {
-        return order;
+    public ClientOrder getClientOrder() {
+        return clientOrder;
     }
 
-    public void setOrder(ClientOrder order) {
-        this.order = order;
+    public void setClientOrder(ClientOrder clientOrder) {
+        this.clientOrder = clientOrder;
     }
 
     public Product getProduct() {
