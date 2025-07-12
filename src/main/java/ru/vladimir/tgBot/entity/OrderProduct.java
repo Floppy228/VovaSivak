@@ -2,7 +2,7 @@ package ru.vladimir.tgBot.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "order-products")
+@Table(name = "order-product")
 public class OrderProduct {
     @Id
     @GeneratedValue
