@@ -1,5 +1,4 @@
 package ru.vladimir.tgBot.entity;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,7 +9,6 @@ public class OrderProduct {
     private Long id;
 
     @ManyToOne
-    @JsonBackReference
     private ClientOrder order;
 
     @ManyToOne

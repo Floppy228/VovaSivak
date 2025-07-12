@@ -1,8 +1,5 @@
 package ru.vladimir.tgBot.entity;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
-import java.util.List;
 
 @Entity
 public class ClientOrder {
@@ -19,9 +16,6 @@ public class ClientOrder {
     @Column(nullable = false)
     private Double total;
 
-    @OneToMany(mappedBy = "order")
-    @JsonManagedReference
-    private List<OrderProduct> orderProducts;
 
     public Long getId() {
         return id;
