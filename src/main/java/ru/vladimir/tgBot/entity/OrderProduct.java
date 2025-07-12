@@ -2,6 +2,7 @@ package ru.vladimir.tgBot.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "order-products")
 public class OrderProduct {
     @Id
     @GeneratedValue
@@ -15,6 +16,8 @@ public class OrderProduct {
 
     @Column(nullable = false)
     private Integer countProduct;
+
+    public OrderProduct() {}
 
     public Long getId() {
         return id;
