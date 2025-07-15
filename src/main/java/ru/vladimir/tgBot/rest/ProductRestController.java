@@ -25,7 +25,6 @@ public class ProductRestController {
         return service.searchProducts(name, categoryId);
     }
 
-
     @GetMapping("/popular")
     public List<Product> getPopularProducts(@RequestParam Integer limit) {
         return service.getTopPopularProducts(limit);

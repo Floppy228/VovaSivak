@@ -17,7 +17,5 @@ public interface EntitiesService {
 
     List<Client> searchClientsByName(String name);
 
-    List<Product> searchProductsByName(String name);
-
     List<Product> searchProducts(String name, Long categoryId);
 }

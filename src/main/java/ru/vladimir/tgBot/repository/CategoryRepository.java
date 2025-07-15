@@ -7,4 +7,3 @@ import ru.vladimir.tgBot.entity.Category;
 @RepositoryRestResource(collectionResourceRel = "categories", path = "categories")
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 }
-
