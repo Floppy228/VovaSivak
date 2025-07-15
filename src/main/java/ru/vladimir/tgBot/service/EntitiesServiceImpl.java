@@ -1,12 +1,16 @@
 package ru.vladimir.tgBot.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import ru.vladimir.tgBot.entity.*;
+import ru.vladimir.tgBot.entity.Client;
+import ru.vladimir.tgBot.entity.ClientOrder;
+import ru.vladimir.tgBot.entity.OrderProduct;
+import ru.vladimir.tgBot.entity.Product;
 import ru.vladimir.tgBot.repository.*;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Service
 @Transactional
@@ -17,6 +21,9 @@ public class EntitiesServiceImpl implements EntitiesService {
     private final ClientRepository clientRepo;
     private final ClientOrderRepository orderRepo;
     private final OrderProductRepository orderProductRepo;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public EntitiesServiceImpl(CategoryRepository categoryRepo,
                                ProductRepository productRepo,
@@ -32,52 +39,80 @@ public class EntitiesServiceImpl implements EntitiesService {
 
     @Override
     public List<Product> getProductsByCategoryId(Long categoryId) {
-        return productRepo.findAll().stream()
-                .filter(product -> product.getCategory() != null && product.getCategory().getId().equals(categoryId))
-                .collect(Collectors.toList());
+        return entityManager.createQuery(
+                        "SELECT p FROM Product p WHERE p.category.id = :categoryId", Product.class)
+                .setParameter("categoryId", categoryId)
+                .getResultList();
     }
 
     @Override
     public List<ClientOrder> getClientOrders(Long clientId) {
-        return orderRepo.findAll().stream()
-                .filter(order -> order.getClient() != null && order.getClient().getId().equals(clientId))
-                .collect(Collectors.toList());
+        return entityManager.createQuery(
+                        "SELECT o FROM ClientOrder o WHERE o.client.id = :clientId", ClientOrder.class)
+                .setParameter("clientId", clientId)
+                .getResultList();
     }
 
     @Override
     public List<Product> getClientProducts(Long clientId) {
-        List<ClientOrder> orders = getClientOrders(clientId);
-        return orderProductRepo.findAll().stream()
-                .filter(op -> orders.contains(op.getClientOrder()))
-                .map(OrderProduct::getProduct)
-                .distinct()
-                .collect(Collectors.toList());
+        return entityManager.createQuery(
+                        "SELECT DISTINCT op.product FROM OrderProduct op WHERE op.clientOrder.client.id = :clientId", Product.class)
+                .setParameter("clientId", clientId)
+                .getResultList();
     }
 
     @Override
     public List<Product> getTopPopularProducts(Integer limit) {
-        return orderProductRepo.findAll().stream()
-                .collect(Collectors.groupingBy(OrderProduct::getProduct, Collectors.summingInt(OrderProduct::getCountProduct)))
-                .entrySet().stream()
-                .sorted(Map.Entry.<Product, Integer>comparingByValue().reversed())
-                .limit(limit)
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+        return entityManager.createQuery(
+                        "SELECT op.product FROM OrderProduct op GROUP BY op.product ORDER BY SUM(op.countProduct) DESC",
+                        Product.class)
+                .setMaxResults(limit)
+                .getResultList();
     }
 
     @Override
     public List<Client> searchClientsByName(String name) {
-        String lowerName = name.toLowerCase();
-        return clientRepo.findAll().stream()
-                .filter(c -> c.getFullName().toLowerCase().contains(lowerName))
-                .collect(Collectors.toList());
+        return entityManager.createQuery(
+                        "SELECT c FROM Client c WHERE LOWER(c.fullName) LIKE LOWER(:name)", Client.class)
+                .setParameter("name", "%" + name + "%")
+                .getResultList();
     }
 
     @Override
     public List<Product> searchProductsByName(String name) {
-        String lowerName = name.toLowerCase();
-        return productRepo.findAll().stream()
-                .filter(p -> p.getName().toLowerCase().contains(lowerName))
-                .collect(Collectors.toList());
+        return entityManager.createQuery(
+                        "SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(:name)", Product.class)
+                .setParameter("name", "%" + name + "%")
+                .getResultList();
     }
+
+    @Override
+    public List<Product> searchProducts(String name, Long categoryId) {
+        if ((name == null || name.isEmpty()) && categoryId == null) {
+            return entityManager.createQuery("SELECT p FROM Product p", Product.class)
+                    .getResultList();
+        }
+
+        if (name != null && !name.isEmpty() && categoryId != null) {
+            return entityManager.createQuery(
+                            "SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(:name) AND p.category.id = :categoryId", Product.class)
+                    .setParameter("name", "%" + name + "%")
+                    .setParameter("categoryId", categoryId)
+                    .getResultList();
+        }
+
+        if (name != null && !name.isEmpty()) {
+            return entityManager.createQuery(
+                            "SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(:name)", Product.class)
+                    .setParameter("name", "%" + name + "%")
+                    .getResultList();
+        }
+
+        // categoryId != null
+        return entityManager.createQuery(
+                        "SELECT p FROM Product p WHERE p.category.id = :categoryId", Product.class)
+                .setParameter("categoryId", categoryId)
+                .getResultList();
+    }
+
 }

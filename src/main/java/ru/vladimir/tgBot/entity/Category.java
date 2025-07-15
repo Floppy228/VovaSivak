@@ -1,4 +1,5 @@
 package ru.vladimir.tgBot.entity;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -16,7 +17,8 @@ public class Category {
     @JoinColumn(name = "parent_id")
     private Category parent;
 
-    public Category() {}
+    public Category() {
+    }
 
     public Long getId() {
         return id;

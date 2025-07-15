@@ -1,6 +1,9 @@
 package ru.vladimir.tgBot.rest;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.vladimir.tgBot.entity.Product;
 import ru.vladimir.tgBot.service.EntitiesService;
 
@@ -19,14 +22,9 @@ public class ProductRestController {
     @GetMapping("/search")
     public List<Product> searchProducts(@RequestParam(required = false) String name,
                                         @RequestParam(required = false) Long categoryId) {
-        List<Product> products = service.searchProductsByName(name != null ? name : "");
-        if (categoryId != null) {
-            products = products.stream()
-                    .filter(p -> p.getCategory() != null && p.getCategory().getId().equals(categoryId))
-                    .toList();
-        }
-        return products;
+        return service.searchProducts(name, categoryId);
     }
+
 
     @GetMapping("/popular")
     public List<Product> getPopularProducts(@RequestParam Integer limit) {

@@ -1,4 +1,5 @@
 package ru.vladimir.tgBot.entity;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -17,7 +18,8 @@ public class OrderProduct {
     @Column(nullable = false)
     private Integer countProduct;
 
-    public OrderProduct() {}
+    public OrderProduct() {
+    }
 
     public Long getId() {
         return id;

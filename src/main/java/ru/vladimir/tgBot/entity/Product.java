@@ -1,4 +1,5 @@
 package ru.vladimir.tgBot.entity;
+
 import jakarta.persistence.*;
 
 @Entity
