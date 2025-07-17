@@ -32,19 +32,6 @@ public class EntitiesServiceImpl implements EntitiesService {
         this.categoryRepo = categoryRepo;
     }
 
-
-//    // Вспомогательный метод для сохранения товара, если его ещё нет
-//    private void saveProductIfNotExists(String name, String desc, double price, Category category) {
-//        if (productRepo.findByNameContainingIgnoreCase(name).isEmpty()) {
-//            Product p = new Product();
-//            p.setName(name);
-//            p.setDescription(desc);
-//            p.setPrice(price);
-//            p.setCategory(category);
-//            productRepo.save(p);
-//        }
-//    }
-
     @Override
     public List<Product> getProductsByCategoryId(Long categoryId) {
         return productRepo.findByCategoryId(categoryId);

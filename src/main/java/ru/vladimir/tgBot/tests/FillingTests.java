@@ -1,4 +1,4 @@
-package ru.vladimir.tgBot;
+package ru.vladimir.tgBot.tests;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
